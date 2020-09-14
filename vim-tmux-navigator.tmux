@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+# https://github.com/NHDaly/tmux-better-mouse-mode/blob/aa59077/scripts/helpers.sh#L1-L10
+get_tmux_option() {
+  local option="$1"
+  local default_value="$2"
+  local option_value=$(tmux show-option -gqv "$option")
+  if [ -z "$option_value" ]; then
+    echo "$default_value"
+  else
+    echo "$option_value"
+  fi
+}
+
 is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
     | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
 tmux bind-key -n C-h if-shell "$is_vim" "send-keys C-h"  "select-pane -L"
